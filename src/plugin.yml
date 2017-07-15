@@ -13,8 +13,14 @@ commands:
 permissions:
   mysql.econ.balance: {description: ability to check own balance, default: true}
   mysql.econ.balance.other: {description: ability to check other balance, default: false}
+  mysql.econ.admin: {description: mysql admin, default: false}
 
   mysql.econ.balance.*:
+    children:
+      mysql.econ.balance: true
+      mysql.econ.balance.other: true
+
+  mysql.econ.admin:
     children:
       mysql.econ.balance: true
       mysql.econ.balance.other: true

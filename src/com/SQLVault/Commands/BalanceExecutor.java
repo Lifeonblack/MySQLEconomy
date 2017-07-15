@@ -7,7 +7,7 @@ import org.bukkit.command.CommandSender;
 /**
  * Created by Raymart on 7/14/2017.
  */
-public class MyCommandExecutor implements CommandExecutor {
+public class BalanceExecutor implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {

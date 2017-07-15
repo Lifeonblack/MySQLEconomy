@@ -98,4 +98,8 @@ public class MySQLEcon extends JavaPlugin {
     public static MySQLEcon getInstance() {
         return instance;
     }
+
+    public String getVersion() {
+        return getDescription().getVersion();
+    }
 }
