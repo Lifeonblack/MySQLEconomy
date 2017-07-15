@@ -1,5 +1,7 @@
 package com.SQLVault;
 
+import com.SQLVault.Commands.BalanceExecutor;
+import com.SQLVault.Commands.EconomyExecutor;
 import com.SQLVault.Economy.EconomyUse;
 import com.SQLVault.Listeners.PlayerJoin;
 import com.SQLVault.Listeners.PlayerLeave;
@@ -89,6 +91,11 @@ public class MySQLEcon extends JavaPlugin {
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(new PlayerJoin(), this);
         pm.registerEvents(new PlayerLeave(), this);
+    }
+
+    private void registerCommands() {
+        getCommand("balance").setExecutor(new BalanceExecutor());
+        getCommand("economy").setExecutor(new EconomyExecutor());
     }
 
     public Statement statement() {
