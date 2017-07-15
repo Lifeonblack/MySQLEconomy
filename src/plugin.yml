@@ -1,0 +1,20 @@
+name: MySQLEconomy
+main: com.SQLVault.MySQLEcon
+version: 1.0
+author: Lifeonblack
+commands:
+  balance:
+    description: to check your balance
+    aliases: [mbal, mbalance, bal]
+  economy:
+    description: for admin command
+    aliases: [econ, eco, mecon, meco]
+
+permissions:
+  mysql.econ.balance: {description: ability to check own balance, default: true}
+  mysql.econ.balance.other: {description: ability to check other balance, default: false}
+
+  mysql.econ.balance.*:
+    children:
+      mysql.econ.balance: true
+      mysql.econ.balance.other: true
