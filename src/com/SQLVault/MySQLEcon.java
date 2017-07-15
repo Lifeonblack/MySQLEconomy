@@ -40,8 +40,7 @@ public class MySQLEcon extends JavaPlugin {
     public void onEnable() {
         saveDefaultConfig();
         instance = this;
-        setupEconomy();
-        if(getServer().getPluginManager().getPlugin("Vault") == null) {
+        if(!setupEconomy() || getServer().getPluginManager().getPlugin("Vault") == null) {
             ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
             getServer().getPluginManager().disablePlugin(this);
             String format = String.format("[%s] - Disabled due to no Vault dependency found!", getDescription().getName());
