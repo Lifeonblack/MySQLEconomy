@@ -2,6 +2,7 @@ name: MySQLEconomy
 main: com.SQLVault.MySQLEcon
 version: 1.0
 author: Lifeonblack
+depend: [Vault]
 commands:
   balance:
     description: to check your balance

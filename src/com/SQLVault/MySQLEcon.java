@@ -8,11 +8,12 @@ import com.SQLVault.Listeners.PlayerLeave;
 import com.SQLVault.MySQL.MySQL;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
-
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -21,6 +22,10 @@ import java.sql.Statement;
  * Main class for this plugin
  */
 public class MySQLEcon extends JavaPlugin {
+    /**
+     * Economy field for vault
+     */
+    public static Economy econ = null;
     private String hostname = getConfig().getString("mysql.host");
     private  String database = getConfig().getString("mysql.database");
     private String username = getConfig().getString("mysql.user");
@@ -31,22 +36,16 @@ public class MySQLEcon extends JavaPlugin {
     private Connection c = null;
     private static MySQLEcon instance;
 
-    /**
-     * The main class constructor
-     */
-    public MySQLEcon() {}
-
-    /**
-     * Economy field for vault
-     */
-    public static Economy econ = null;
-
     @Override
     public void onEnable() {
+        saveDefaultConfig();
         instance = this;
-        if(!setupEconomy()) {
-            getLogger().severe("Disabled due to no dependancy found");
+        setupEconomy();
+        if(getServer().getPluginManager().getPlugin("Vault") == null) {
+            ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
             getServer().getPluginManager().disablePlugin(this);
+            String format = String.format("[%s] - Disabled due to no Vault dependency found!", getDescription().getName());
+            console.sendMessage(ChatColor.translateAlternateColorCodes('&', "&c" + format));
             return;
         }
 
@@ -57,7 +56,6 @@ public class MySQLEcon extends JavaPlugin {
         }catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
-
         for(Player player : Bukkit.getOnlinePlayers()) {
             com.SQLVault.Economy.Economy economy = new EconomyUse(player);
             try {
@@ -76,15 +74,12 @@ public class MySQLEcon extends JavaPlugin {
      * @return true if the economy setup correctly
      */
     private boolean setupEconomy() {
-        if (getServer().getPluginManager().getPlugin("Vault") == null) {
-            return false;
+        RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+        if (economyProvider != null) {
+            econ = economyProvider.getProvider();
         }
-        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
-        if (rsp == null) {
-            return false;
-        }
-        econ = rsp.getProvider();
-        return econ != null;
+
+        return (econ != null);
     }
 
     private void registerEvents() {
